@@ -10,7 +10,7 @@ const validatorModelMiddleware = (schema) => {
   return async (req, res, next) => {
     try {
       const body = req.body;
-      if (req.files) {
+      if ((req.files, body?.images)) {
         body.images = req.files.map((f) => (f = { path: f.filename }));
       }
       const project = await schema.validate(body, { abortEarly: false });

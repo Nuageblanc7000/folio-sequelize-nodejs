@@ -1,4 +1,5 @@
 const { multerProjectConfig } = require("../config/multer");
+const { ErrorResponse } = require("../utils/Responses/Error.response");
 
 /**
  * Middleware de configuration Multer pour la gestion de plusieurs images envoyées dans une requête
@@ -7,6 +8,11 @@ const { multerProjectConfig } = require("../config/multer");
  */
 const multerProjectMiddleware = () => {
   return (req, res, next) => {
+    if (!req.body.hasOwnProperty("images")) {
+      return res
+        .status(400)
+        .json(new ErrorResponse("Le champ 'images' est obligatoire", "images"));
+    }
     multerProjectConfig.array("images")(req, res, (err) => {
       if (err) {
         return next(err);

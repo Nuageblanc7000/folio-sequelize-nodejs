@@ -37,7 +37,8 @@ const projectController = {
   create: async (req, res, next) => {
     const newProject = req.body;
     const payload = await req.payload;
-    if (req.files && req.files.length) {
+    console.log(newProject);
+    if ((req.files && req.files.length, newProject?.images)) {
       const images = req.files.map((i) => (i = { path: i.filename }));
       newProject.images = await imageService.create(images);
     }

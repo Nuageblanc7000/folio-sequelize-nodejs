@@ -34,10 +34,10 @@ const projectService = {
     const newProjectDTO = new ProjectCreateDTO(newProject);
     newProjectDTO.UserId = user;
     const project = await DBMYSQL.Project.create(newProjectDTO);
-    if (newProject.images?.length) {
+    if (newProject?.images?.length) {
       await project.addImages(newProject.images);
     }
-    if (newProjectDTO.technologies?.length > 0) {
+    if (newProjectDTO?.technologies?.length > 0) {
       const technos = await DBMYSQL.Technology.findAll({
         where: { id: newProjectDTO.technologies },
       });

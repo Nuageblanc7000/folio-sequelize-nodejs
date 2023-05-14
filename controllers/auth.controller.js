@@ -26,6 +26,12 @@ const authController = {
    */
   login: async (req, res, next) => {
     const { email, password } = req.body;
+    if (
+      req.body.hasOwnProperty("email") ||
+      req.body.hasOwnProperty("password")
+    ) {
+      return next({ name: ErrorCode.USER_LOGIN_FAILED });
+    }
     const user = await authService.login(email, password);
     if (!user) {
       return next({ name: ErrorCode.USER_LOGIN_FAILED });
