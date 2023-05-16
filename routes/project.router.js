@@ -10,63 +10,156 @@ const schemaProject = require("../validators/project.validator");
 const projectRouter = require("express").Router();
 
 /**
- * Route pour récupérer tous les projets
- * Middleware : authMiddleware
+ * @openapi
+ * /api/projects:
+ *   get:
+ *     tags:
+ *       - Projects
+ *     summary: Récupérer tous les projets
+ *     responses:
+ *       '200':
+ *         description: Succès de la requête
  */
-projectRouter.route("/").get(projectController.getAll).post(
-  /**
-   * Middleware : authMiddleware, roleMiddleware, multerProjectMiddleware, projectValidateMiddleware
-   * But : Vérification des autorisations, des rôles, de la validité des technologies, du format de l'image et de la validité des données du projet
-   */
+projectRouter.get("/", projectController.getAll);
+
+/**
+ * @openapi
+ * /api/projects:
+ *   post:
+ *     tags:
+ *       - Projects
+ *     summary: Créer un nouveau projet
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: file
+ *               technologies:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *             required:
+ *               - title
+ *               - description
+ *               - images
+ *               - technologies
+ *     responses:
+ *       '201':
+ *         description: Projet créé avec succès
+ */
+projectRouter.post(
+  "/",
   authMiddleware(),
   roleMiddleware(),
-
   multerProjectMiddleware(),
   validatorModelMiddleware(schemaProject),
   projectController.create
 );
 
 /**
- * Route pour récupérer un projet en particulier
- * Middleware : Aucun
+ * @openapi
+ * /api/projects/{id}:
+ *   get:
+ *     tags:
+ *       - Projects
+ *     summary: Récupérer un projet spécifique
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID du projet
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Succès de la requête
  */
-projectRouter
-  .route("/:id")
-  .get(projectController.getById)
-  .put(
-    /**
-     * Middleware : authMiddleware, roleMiddleware, checkTechMiddleware, multerProjectMiddleware, projectValidateMiddleware
-     * But : Vérification des autorisations, des rôles, de la validité des technologies, du format de l'image et de la validité des données du projet
-     */
-    authMiddleware(),
-    roleMiddleware("admin"),
-    isOwnerMiddleware(Project),
-    multerProjectMiddleware(),
-    projectController.update
-  )
-  .delete(
-    /**
-     * Middleware : authMiddleware, roleMiddleware
-     * But : Vérification des autorisations et des rôles
-     */
-    authMiddleware(),
-    roleMiddleware(),
-    isOwnerMiddleware(Project),
-    projectController.delete
-  );
+projectRouter.get("/:id", projectController.getById);
 
 /**
- * Route pour supprimer une image associée à un projet
- * Middleware : authMiddleware, roleMiddleware
- * But : Vérification des autorisations et des rôles
+ * @openapi
+ * /api/projects/{id}:
+ *   put:
+ *     tags:
+ *       - Projects
+ *     summary: Mettre à jour un projet
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID du projet
+ *         schema:
+ *           type: string
+ *         required: true
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               imagesRemove:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *               technologies:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *             required:
+ *               - title
+ *     responses:
+ *       '200':
+ *         description: Projet mis à jour avec succès
  */
-projectRouter
-  .route("/:id/images/:imageId")
-  .delete(
-    authMiddleware(),
-    roleMiddleware(),
-    isOwnerMiddleware(Project),
-    projectController.deleteImage
-  );
-
+projectRouter.put(
+  "/:id",
+  authMiddleware(),
+  roleMiddleware("admin"),
+  isOwnerMiddleware(Project),
+  multerProjectMiddleware(),
+  projectController.update
+);
+/**
+ * @openapi
+ * /api/projects/{id}:
+ *   delete:
+ *     tags:
+ *       - Projects
+ *     summary: Supprimer un projet
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID du projet
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Projet supprimé avec succès
+ */
+projectRouter.delete(
+  "/:id",
+  authMiddleware(),
+  roleMiddleware(),
+  isOwnerMiddleware(Project),
+  projectController.delete
+);
 module.exports = projectRouter;

@@ -1,4 +1,3 @@
-const { Technology } = require("../schemas");
 const ImageDTO = require("./image.dto");
 const { TechnologyDTO } = require("./technology.dto");
 const { userDTO } = require("./user.dto");

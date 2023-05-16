@@ -8,8 +8,9 @@ const fileService = {
     const arrayFiles = Array.isArray(files) ? files : [files];
     arrayFiles.forEach((f) => {
       const fullPath = f?.path
-        ? path.join(__dirname, "..", f.path)
+        ? path.join(f.path)
         : path.join(__dirname, "..", f);
+      console.log(fullPath);
       if (fs.existsSync(fullPath)) {
         fs.unlink(fullPath, (err) => {
           if (err) {

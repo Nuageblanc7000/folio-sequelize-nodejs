@@ -1,5 +1,6 @@
 const yup = require("yup");
 const userService = require("../services/user.service");
+const messages = require("./message");
 
 const uniqueEmail = async (email) => {
   const exist = await userService.userEmailExist(email);
@@ -11,8 +12,8 @@ const uniqueEmail = async (email) => {
 };
 
 const schemaUser = yup.object().shape({
-  firstname: yup.string().required().trim(),
-  lastname: yup.string().required().trim(),
+  firstname: yup.string().required(messages.required).trim(),
+  lastname: yup.string().required(messages.required).trim(),
   roles: yup.string().trim(),
   email: yup
     .string()

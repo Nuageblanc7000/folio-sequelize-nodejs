@@ -1,6 +1,6 @@
 const { userCreateDTO, userDTO } = require("../DTO/user.dto");
 const DBMYSQL = require("../models");
-const db = require("../schemas");
+
 const bcrypt = require("bcrypt");
 
 const authService = {

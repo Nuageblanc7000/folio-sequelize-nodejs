@@ -1,8 +1,8 @@
 const ErrorCode = require("../utils/Responses/code.error");
-
+const { ModelStatic } = require("sequelize");
 /**
  *
- * @param {import("sequelize").ModelStatic<any>} Model
+ * @param {ModelStatic<any>} Model
  * @returns
  */
 const isOwnerMiddleware = (Model) => {
@@ -11,13 +11,13 @@ const isOwnerMiddleware = (Model) => {
       return next({ name: ErrorCode.ACCESS_DENIED });
     }
     const { id: userId } = req.payload;
-    const entityId = req.params.id;
+    const entityId = +req.params.id;
+    const a = await Model.findOne({ where: { id: entityId } });
     const isOwner = await Model.findOne({
-      where: { userId: userId, id: entityId },
+      where: { UserId: userId, id: entityId },
     });
-
     if (!isOwner) {
-      return next({ name: ErrorCode.ACCESS_DENIED });
+      return next({ name: ErrorCode.FORBIDEN_ERROR });
     }
     return next();
   };

@@ -36,6 +36,7 @@ const projectController = {
    */
   create: async (req, res, next) => {
     const newProject = req.body;
+    console.log(await req.user, "------------------------> request user");
     const payload = await req.payload;
     console.log(newProject);
     if ((req.files && req.files.length, newProject?.images)) {

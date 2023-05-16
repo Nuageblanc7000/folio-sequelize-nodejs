@@ -3,7 +3,7 @@ const authService = require("../services/auth.service");
 const { SuccessResponse } = require("../utils/Responses/Succes.response");
 const ErrorCode = require("../utils/Responses/code.error");
 const jwt = require("../utils/jwt.utils");
-const session = require("express-session");
+
 const authController = {
   /**
    *
@@ -26,12 +26,7 @@ const authController = {
    */
   login: async (req, res, next) => {
     const { email, password } = req.body;
-    if (
-      req.body.hasOwnProperty("email") ||
-      req.body.hasOwnProperty("password")
-    ) {
-      return next({ name: ErrorCode.USER_LOGIN_FAILED });
-    }
+
     const user = await authService.login(email, password);
     if (!user) {
       return next({ name: ErrorCode.USER_LOGIN_FAILED });
@@ -40,6 +35,7 @@ const authController = {
       role: user.role,
       id: user.id,
     });
+    req.user = user;
     res.cookie("token", token, { httpOnly: true });
     res.status(200).json({ user, token });
   },

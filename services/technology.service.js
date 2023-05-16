@@ -1,6 +1,5 @@
 const { TechnologyDTO, TechnologyCreateDTO } = require("../DTO/technology.dto");
 const DBMYSQL = require("../models");
-const db = require("../schemas");
 
 const technologyService = {
   getAll: async () => {

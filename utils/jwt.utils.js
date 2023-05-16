@@ -3,11 +3,11 @@ const jsonwebtoken = require("jsonwebtoken");
 const { JWT_SECRET_KEY } = process.env;
 
 const jwt = {
-  generate: ({ id, roles }) => {
+  generate: ({ id, role }) => {
     return new Promise((resolve, reject) => {
       const payload = {
         id,
-        roles,
+        role,
       };
       const options = {
         expiresIn: "1d",

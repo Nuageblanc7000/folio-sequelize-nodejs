@@ -16,7 +16,9 @@ const validatorModelMiddleware = (schema) => {
       const project = await schema.validate(body, { abortEarly: false });
     } catch (err) {
       if (req.files) {
-        fileService.deleteFile(req.files);
+        fileService.deleteFile(req.files, (err) => {
+          console.log(err, "----------------->");
+        });
       }
       return next(err);
     }

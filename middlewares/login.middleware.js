@@ -11,12 +11,13 @@ const ErrorCode = require("../utils/Responses/code.error");
 const loginMiddleWare = () => {
   return async (req, res, next) => {
     const { email } = req.body; // Récupère l'email de la requête.
+    console.log(email);
     const emailExist = await userService.userEmailExist(email); // Vérifie si l'email existe dans la base de données.
     if (!emailExist) {
       // Si l'email n'existe pas, appelle la fonction middleware suivante avec une erreur.
-      next({ name: ErrorCode.USER_LOGIN_FAILED });
+      return next({ name: ErrorCode.USER_LOGIN_FAILED });
     }
-    next(); // Appelle la fonction middleware suivante si l'email existe.
+    return next(); // Appelle la fonction middleware suivante si l'email existe.
   };
 };
 

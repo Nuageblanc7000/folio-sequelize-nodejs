@@ -16,6 +16,7 @@ const authMiddleware = () => {
     }
     // Décode le token JWT
     const payload = await decode(req.cookies.token);
+    console.log(payload);
     // Ajoute le payload du token à la requête
     req.payload = payload;
 

@@ -9,26 +9,7 @@ const ErrorCode = require("./code.error");
 // Les gestionnaires d'erreurs pour chaque type d'erreur
 const errorHandler = {
   [ErrorCode.MULTER_ERROR]: (err, res) => {
-    switch (err.code) {
-      case ErrorCode.MIMETYPE_UNEXPECTED:
-        return res
-          .status(400)
-          .json(
-            new ErrorFileResponse(
-              err,
-              "Veuillez insérer un fichier de type:jpg/png"
-            )
-          );
-      case ErrorCode.LIMIT_FILE_SIZE:
-        return res
-          .status(400)
-          .json(
-            new ErrorFileResponse(
-              err,
-              "Le fichier est trop volumineux max 10 mega"
-            )
-          );
-    }
+    res.status(400).json(new ErrorFileResponse(err, "", 400));
   },
   [ErrorCode.VALIDATOR_ERROR]: (err, res) => {
     console.log(err);

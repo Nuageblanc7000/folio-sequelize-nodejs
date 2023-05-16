@@ -4,7 +4,6 @@ const {
   ProjectsDTO,
 } = require("../DTO/project.dto");
 const DBMYSQL = require("../models");
-const db = require("../schemas");
 const fs = require("fs");
 const path = require("path");
 const imageService = require("./image.service");
